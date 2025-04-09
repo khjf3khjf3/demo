@@ -32,18 +32,12 @@ steps:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
 
-  - task: Gradle@3
-    displayName: '📦 Jib: Push Docker image to GHCR'
-    inputs:
-      gradleWrapperFile: 'gradlew'
-      tasks: >
-        jib -Djib.to.image=ghcr.io/$GHCR_USERNAME/demo:latest
-             -Djib.to.auth.username=$GHCR_USERNAME
-             -Djib.to.auth.password=$GHCR_TOKEN
-      options: ''
-      javaHomeOption: 'Path'
-      jdkDirectory: '/usr/lib/jvm/java-17-openjdk'
-      jdkArchitectureOption: 'x64'
+  - script: |
+      ./gradlew jib \
+        -Djib.to.image=ghcr.io/$GHCR_USERNAME/demo:latest \
+        -Djib.to.auth.username=$GHCR_USERNAME \
+        -Djib.to.auth.password=$GHCR_TOKEN
+    displayName: 'Jib: Push image to GitHub Container Registry'
     env:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
