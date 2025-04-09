@@ -10,5 +10,8 @@ pool:
   name: selfhost
 
 steps:
+  - script: chmod +x gradlew
+    displayName: 'Grant execute permission to gradlew hahaha'
+
   - script: ./gradlew build
     displayName: 'Build on RHEL self-hosted agent'
