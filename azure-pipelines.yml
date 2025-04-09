@@ -9,9 +9,21 @@ trigger:
 pool:
   name: selfhost
 
+variables:
+  IMAGE_NAME: demo
+  GHCR_USERNAME: $(GHCR_USERNAME)
+  GHCR_TOKEN: $(GHCR_TOKEN)
+
 steps:
   - script: chmod +x gradlew
     displayName: 'Grant execute permission to gradlew hahaha'
 
   - script: ./gradlew build
     displayName: 'Build on RHEL self-hosted agent'
+
+  - script: |
+      ./gradlew jib \
+        -Djib.to.image=ghcr.io/$(GHCR_USERNAME)/$(IMAGE_NAME):latest \
+        -Djib.to.auth.username=$(GHCR_USERNAME) \
+        -Djib.to.auth.password=$(GHCR_TOKEN)
+    displayName: 'Jib: Push image to GitHub Container Registry'    
