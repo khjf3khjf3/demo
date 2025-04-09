@@ -22,7 +22,7 @@ steps:
 
   - script: |
       ./gradlew jib \
-        -Djib.to.image=ghcr.io/$GHCR_USERNAME/$IMAGE_NAME:latest \
+        -Djib.to.image=ghcr.io/$GHCR_USERNAME/demo:latest \
         -Djib.to.auth.username=$GHCR_USERNAME \
         -Djib.to.auth.password=$GHCR_TOKEN
     displayName: 'Jib: Push image to GitHub Container Registry'
