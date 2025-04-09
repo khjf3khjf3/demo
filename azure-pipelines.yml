@@ -14,22 +14,36 @@ variables:
 
 steps:
   - script: echo "GHCR_USERNAME=$GHCR_USERNAME"
-    displayName: '환경변수'
-  - script: chmod +x gradlew
-    displayName: 'Grant execute permission to gradlew hahaha'
+    displayName: '🔍 환경변수 확인'
+    env:
+      GHCR_USERNAME: $(GHCR_USERNAME)
 
-  - script: ./gradlew build
-    displayName: 'Build on RHEL self-hosted agent'
+  - task: Gradle@3
+    displayName: '🛠️ Build with Gradle'
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'build'
+      options: '-Xmx2g'
+      publishJUnitResults: false
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '17'
+      jdkArchitectureOption: 'x64'
     env:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
 
-  - script: |
-      ./gradlew jib \
-        -Djib.to.image=ghcr.io/$GHCR_USERNAME/demo:latest \
-        -Djib.to.auth.username=$GHCR_USERNAME \
-        -Djib.to.auth.password=$GHCR_TOKEN
-    displayName: 'Jib: Push image to GitHub Container Registry'
+  - task: Gradle@3
+    displayName: '📦 Jib: Push Docker image to GHCR'
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: >
+        jib -Djib.to.image=ghcr.io/$GHCR_USERNAME/demo:latest
+             -Djib.to.auth.username=$GHCR_USERNAME
+             -Djib.to.auth.password=$GHCR_TOKEN
+      options: ''
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '17'
+      jdkArchitectureOption: 'x64'
     env:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
