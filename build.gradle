@@ -5,12 +5,15 @@ plugins {
 	id 'com.google.cloud.tools.jib' version '3.4.0'
 }
 
+def ghcrUser = System.getenv("GHCR_USERNAME")
+def ghcrToken = System.getenv("GHCR_TOKEN")
+
 jib {
   to {
-    image = 'ghcr.io/${System.getenv('GHCR_USERNAME')}/demo:latest'
+    image = "ghcr.io/${ghcrUser}/demo:latest"
     auth {
-      username = System.getenv('GHCR_USERNAME')
-      password = System.getenv('GHCR_TOKEN')  // GitHub PAT 사용
+      username = ghcrUser
+      password = ghcrToken
     }
   }
 }
