@@ -22,7 +22,7 @@ steps:
     displayName: '🛠️ Build with Gradle'
     inputs:
       gradleWrapperFile: 'gradlew'
-      tasks: 'build'
+      tasks: build
       options: '-Xmx2g'
       publishJUnitResults: false
       javaHomeOption: 'Path'
