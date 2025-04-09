@@ -5,6 +5,16 @@ plugins {
 	id 'com.google.cloud.tools.jib' version '3.4.0'
 }
 
+jib {
+  to {
+    image = 'ghcr.io/khjf3khjf3/demo:latest'
+    auth {
+      username = System.getenv('khjf3khjf3')
+      password = System.getenv('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')  // GitHub PAT 사용
+    }
+  }
+}
+
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
