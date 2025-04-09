@@ -7,10 +7,10 @@ plugins {
 
 jib {
   to {
-    image = 'ghcr.io/khjf3khjf3/demo:latest'
+    image = 'ghcr.io/${System.getenv('GHCR_USERNAME')}/demo:latest'
     auth {
-      username = System.getenv('khjf3khjf3')
-      password = System.getenv('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')  // GitHub PAT 사용
+      username = System.getenv('GHCR_USERNAME')
+      password = System.getenv('GHCR_TOKEN')  // GitHub PAT 사용
     }
   }
 }
