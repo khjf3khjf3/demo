@@ -16,10 +16,17 @@ steps:
 
   - script: ./gradlew build
     displayName: 'Build on RHEL self-hosted agent'
+    env:
+      GHCR_USERNAME: $(GHCR_USERNAME)
+      GHCR_TOKEN: $(GHCR_TOKEN)
 
   - script: |
       ./gradlew jib \
         -Djib.to.image=ghcr.io/$GHCR_USERNAME/$IMAGE_NAME:latest \
         -Djib.to.auth.username=$GHCR_USERNAME \
         -Djib.to.auth.password=$GHCR_TOKEN
-    displayName: 'Jib: Push image to GitHub Container Registry'    
+    displayName: 'Jib: Push image to GitHub Container Registry'
+    env:
+      GHCR_USERNAME: $(GHCR_USERNAME)
+      GHCR_TOKEN: $(GHCR_TOKEN)
+
