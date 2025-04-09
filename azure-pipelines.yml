@@ -9,10 +9,6 @@ trigger:
 pool:
   name: selfhost
 
-variables:
-  IMAGE_NAME: demo
-  GHCR_USERNAME: $(GHCR_USERNAME)
-  GHCR_TOKEN: $(GHCR_TOKEN)
 
 steps:
   - script: chmod +x gradlew
