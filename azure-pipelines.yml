@@ -15,8 +15,6 @@ variables:
   GHCR_TOKEN: $(GHCR_TOKEN)
 
 steps:
-  - script: echo "Username is: $GHCR_USERNAME"
-    displayName: "환경변수 확인"
   - script: chmod +x gradlew
     displayName: 'Grant execute permission to gradlew hahaha'
 
@@ -25,7 +23,7 @@ steps:
 
   - script: |
       ./gradlew jib \
-        -Djib.to.image=ghcr.io/$(GHCR_USERNAME)/$(IMAGE_NAME):latest \
-        -Djib.to.auth.username=$(GHCR_USERNAME) \
-        -Djib.to.auth.password=$(GHCR_TOKEN)
+        -Djib.to.image=ghcr.io/$GHCR_USERNAME/$IMAGE_NAME:latest \
+        -Djib.to.auth.username=$GHCR_USERNAME \
+        -Djib.to.auth.password=$GHCR_TOKEN
     displayName: 'Jib: Push image to GitHub Container Registry'    
