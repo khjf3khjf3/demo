@@ -32,7 +32,7 @@ steps:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
 
-  - script: echo "ls -al"
+  - script: ls -al build/libs
     displayName: 'search'
 
   - task: PublishBuildArtifacts@1
