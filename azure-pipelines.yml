@@ -32,15 +32,22 @@ steps:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
 
-  - script: ls -al build/libs
-    displayName: 'search'
-
   - task: PublishBuildArtifacts@1
     displayName: '📦 Publish JAR Artifact'
     inputs:
       pathToPublish: 'build/libs'
       artifactName: 'springboot-jar'
       publishLocation: 'Container'
+  
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: 'springboot-jar'
+      downloadPath: '$(Build.ArtifactStagingDirectory)'
+
+  - script: ls -al $(Build.ArtifactStagingDirectory)
+    displayName: 'search'      
 
   - script: |
       ./gradlew jib \
