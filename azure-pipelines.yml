@@ -46,7 +46,7 @@ steps:
       artifactName: 'springboot-jar'
       downloadPath: '$(Build.ArtifactStagingDirectory)'
 
-  - script: ls -al $(Build.ArtifactStagingDirectory)
+  - script: ls -al $(Build.ArtifactStagingDirectory)/springboot-jar
     displayName: 'search'      
 
   - script: |
