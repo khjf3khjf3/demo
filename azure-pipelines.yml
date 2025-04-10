@@ -32,6 +32,9 @@ steps:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
 
+  - script: echo "ls -al"
+    displayName: 'search'
+
   - task: PublishBuildArtifacts@1
     displayName: '📦 Publish JAR Artifact'
     inputs:
