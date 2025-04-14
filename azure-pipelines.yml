@@ -31,6 +31,8 @@ steps:
     env:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
+      AZURE_DEVOPS_USER: 'Azure DevOps'
+      AZURE_DEVOPS_PAT: $(System.AccessToken)
 
   - task: PublishBuildArtifacts@1
     displayName: '📦 Publish JAR Artifact'
@@ -58,4 +60,6 @@ steps:
     env:
       GHCR_USERNAME: $(GHCR_USERNAME)
       GHCR_TOKEN: $(GHCR_TOKEN)
+      AZURE_DEVOPS_USER: 'Azure DevOps'
+      AZURE_DEVOPS_PAT: $(System.AccessToken)
 
