@@ -23,7 +23,9 @@ steps:
     inputs:
       gradleWrapperFile: 'gradlew'
       tasks: build
-      options: ''
+      options: >
+        -DazdevUsername=Azure DevOps
+        -DazdevPassword=$(System.AccessToken)
       publishJUnitResults: false
       javaHomeOption: 'Path'
       jdkDirectory: '/usr/lib/jvm/java-17-openjdk'
@@ -33,8 +35,6 @@ steps:
       GHCR_TOKEN: $(GHCR_TOKEN)
       #AZURE_DEVOPS_USER: 'Azure DevOps'
       #AZURE_DEVOPS_PAT: $(System.AccessToken)
-      azdevUsername: 'Azure DevOps'
-      azdevPassword: $(System.AccessToken)
 
   - task: PublishBuildArtifacts@1
     displayName: '📦 Publish JAR Artifact'
