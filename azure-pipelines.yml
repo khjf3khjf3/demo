@@ -23,9 +23,7 @@ steps:
     inputs:
       gradleWrapperFile: 'gradlew'
       tasks: build
-      options: >
-        -DazdevUsername=AzureDevOps
-        -DazdevPassword=$(System.AccessToken)
+      options: "-DazdevUsername=Azure DevOps -DazdevPassword=$(System.AccessToken)"
       publishJUnitResults: false
       javaHomeOption: 'Path'
       jdkDirectory: '/usr/lib/jvm/java-17-openjdk'
