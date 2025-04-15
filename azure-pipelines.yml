@@ -24,7 +24,7 @@ steps:
       gradleWrapperFile: 'gradlew'
       tasks: build
       options: >
-        -DazdevUsername=Azure DevOps
+        -DazdevUsername=azdev
         -DazdevPassword=$(System.AccessToken)
       publishJUnitResults: false
       javaHomeOption: 'Path'
