@@ -27,11 +27,11 @@ repositories {
     maven {
     url 'https://pkgs.dev.azure.com/Cpkh/SKR/_packaging/azdev/maven/v1'
     name 'azdev'
-    //credentials(PasswordCredentials)
-    credentials {
-      username = System.getenv("AZURE_DEVOPS_USER") ?: "Azure DevOps"
-      password = System.getenv("AZURE_DEVOPS_PAT")
-    }
+    credentials(PasswordCredentials)
+    //credentials {
+    //  username = System.getenv("AZURE_DEVOPS_USER") ?: "Azure DevOps"
+    //  password = System.getenv("AZURE_DEVOPS_PAT")
+    //}
     authentication {
        basic(BasicAuthentication)
     }
