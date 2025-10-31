@@ -12,54 +12,71 @@ pool:
 variables:
 - group: demo
 
-steps:
-  - script: echo "GHCR_USERNAME=$GHCR_USERNAME"
-    displayName: '🔍 환경변수 확인'
-    env:
-      GHCR_USERNAME: $(GHCR_USERNAME)
+stages:
+- stage: Build
+  displayName: Build Stage
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+      - script: echo "GHCR_USERNAME=$GHCR_USERNAME"
+        displayName: '🔍 환경변수 확인'
+        env:
+          GHCR_USERNAME: $(GHCR_USERNAME)
+    
+      - task: Gradle@3
+        displayName: '🛠️ Build with Gradle'
+        inputs:
+          gradleWrapperFile: 'gradlew'
+          tasks: build
+          options: ''
+          publishJUnitResults: false
+          javaHomeOption: 'Path'
+          jdkDirectory: '/usr/lib/jvm/java-17-openjdk'
+          jdkArchitectureOption: 'x64'
+        env:
+          GHCR_USERNAME: $(GHCR_USERNAME)
+          GHCR_TOKEN: $(GHCR_TOKEN)
+          AZURE_DEVOPS_USER: 'azdev'
+          AZURE_DEVOPS_PAT: $(System.AccessToken)
+    
+      - task: PublishBuildArtifacts@1
+        displayName: '📦 Publish JAR Artifact'
+        inputs:
+          pathToPublish: 'build/libs'
+          artifactName: 'springboot-jar'
+          publishLocation: 'Container'
+      
+      - task: DownloadBuildArtifacts@0
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'springboot-jar'
+          downloadPath: '$(Build.ArtifactStagingDirectory)'
+    
+      - script: ls -al $(Build.ArtifactStagingDirectory)/springboot-jar
+        displayName: 'search'      
+    
+      - script: |
+          ./gradlew jib \
+            -Djib.to.image=ghcr.io/$GHCR_USERNAME/demo:latest \
+            -Djib.to.auth.username=$GHCR_USERNAME \
+            -Djib.to.auth.password=$GHCR_TOKEN
+        displayName: 'Jib: Push image to GitHub Container Registry'
+        env:
+          GHCR_USERNAME: $(GHCR_USERNAME)
+          GHCR_TOKEN: $(GHCR_TOKEN)
+          AZURE_DEVOPS_USER: 'Azure DevOps'
+          AZURE_DEVOPS_PAT: $(System.AccessToken)
 
-  - task: Gradle@3
-    displayName: '🛠️ Build with Gradle'
-    inputs:
-      gradleWrapperFile: 'gradlew'
-      tasks: build
-      options: ''
-      publishJUnitResults: false
-      javaHomeOption: 'Path'
-      jdkDirectory: '/usr/lib/jvm/java-17-openjdk'
-      jdkArchitectureOption: 'x64'
-    env:
-      GHCR_USERNAME: $(GHCR_USERNAME)
-      GHCR_TOKEN: $(GHCR_TOKEN)
-      AZURE_DEVOPS_USER: 'azdev'
-      AZURE_DEVOPS_PAT: $(System.AccessToken)
-
-  - task: PublishBuildArtifacts@1
-    displayName: '📦 Publish JAR Artifact'
-    inputs:
-      pathToPublish: 'build/libs'
-      artifactName: 'springboot-jar'
-      publishLocation: 'Container'
-  
-  - task: DownloadBuildArtifacts@0
-    inputs:
-      buildType: 'current'
-      downloadType: 'single'
-      artifactName: 'springboot-jar'
-      downloadPath: '$(Build.ArtifactStagingDirectory)'
-
-  - script: ls -al $(Build.ArtifactStagingDirectory)/springboot-jar
-    displayName: 'search'      
-
-  - script: |
-      ./gradlew jib \
-        -Djib.to.image=ghcr.io/$GHCR_USERNAME/demo:latest \
-        -Djib.to.auth.username=$GHCR_USERNAME \
-        -Djib.to.auth.password=$GHCR_TOKEN
-    displayName: 'Jib: Push image to GitHub Container Registry'
-    env:
-      GHCR_USERNAME: $(GHCR_USERNAME)
-      GHCR_TOKEN: $(GHCR_TOKEN)
-      AZURE_DEVOPS_USER: 'Azure DevOps'
-      AZURE_DEVOPS_PAT: $(System.AccessToken)
-
+- stage: Deploy
+  displayName: Deploy Stage
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    steps:
+      - script: echo "GHCR_USERNAME=$GHCR_USERNAME"
+        displayName: '🔍 환경변수 확인'
+        env:
+          GHCR_USERNAME: $(GHCR_USERNAME)
+      
